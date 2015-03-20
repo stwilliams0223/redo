@@ -1,0 +1,390 @@
+@import 'bourbon'; // http://bourbon.io/
+
+@import '../partials/variables'; // colors, fonts etc...
+
+@import '../partials/mixins'; // custom mixins
+
+@import '../partials/layout'; // responsive grid and media queries
+
+/* -------------------------------- 
+
+Primary style
+
+-------------------------------- */
+
+html * {
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+*, *:after, *:before {
+	@include box-sizing(border-box);
+}
+
+body {
+	font: {
+		size: 100%;
+		family: $primary-font; // variables inside partials > _variables.scss
+	}
+	color: $color-1;
+	background-color: $color-4;
+}
+
+body, html {
+	/* important */
+	height: 100%;
+}
+
+a {
+	color: $color-3;
+	text-decoration: none;
+}
+
+/* -------------------------------- 
+
+Modules - reusable parts of our design
+
+-------------------------------- */
+
+.cd-container { /* this class is used to give a max-width to the element it is applied to, and center it horizontally when it reaches that max-width */
+	width: 90%;
+	max-width: $M; // breakpoints inside partials > _layout.scss
+	margin: 0 auto;
+
+	&::after { /* clearfix */
+		content: '';
+		display: table;
+		clear: both;
+	}
+}
+
+/* -------------------------------- 
+
+Main components 
+
+-------------------------------- */
+
+.cd-header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: $header-height-S;
+	background: rgba($color-4, .95);
+	box-shadow: 0 1px 2px rgba(#000, .2);
+	z-index: index($main-elements, navigation); // see partials > _variables.scss
+	@include clearfix;
+
+	#cd-logo {
+		float: left;
+		margin: 13px 0 0 5%;
+
+		img {
+			display: block;
+		}
+	}
+
+	@include MQ(M) {
+		height: $header-height-M;
+
+		#cd-logo {
+			margin: 23px 0 0 5%;
+		}
+	}
+}
+
+.cd-main-nav {
+	float: right;
+	margin-right: 5%;
+	width: 44px;
+	height: 100%;
+	background: url('../img/cd-icon-menu.svg') no-repeat center center;
+	background-size: 44px 44px;
+	cursor: pointer;
+
+	ul {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		@include transform(translateY(-100%));
+
+		&.is-visible {
+			@include transform(translateY($header-height-S));
+		}
+	}
+
+	a {
+		display: block;
+		height: $header-height-S;
+		line-height: $header-height-S;
+		padding-left: 5%;
+		background: darken($color-1, 5%);
+		border-top: 1px solid lighten($color-1, 3%);
+		color: lighten($color-1, 30%);
+	}
+
+	@include MQ(M) {
+		width: auto;
+		height: auto;
+		background: none;
+		cursor: auto;
+
+		ul {
+			position: static;
+			width: auto;
+			@include transform(translateY(0));
+			line-height: $header-height-M;
+
+			&.is-visible {
+				@include transform(translateY(0));
+			}
+		}
+
+		li {
+			display: inline-block;
+			margin-left: 1em;
+		}
+
+		a {
+			display: inline-block;
+			height: auto;
+			line-height: normal;
+			background: transparent;
+			padding: .6em 1em;
+			border-top: none;
+			color: $color-1;
+			text-transform: uppercase;
+			font-weight: bold;
+			@include font-size(14px);
+
+			.no-touch &:hover {
+				color: $color-2;
+			}
+		}
+	}
+}
+
+.cd-main-content {
+	/* you need to assign a min-height to the main content so that the children can inherit it*/
+	height: 100%;
+	position: relative;
+	z-index: index($main-elements, main-content); // see partials > _variables.scss
+}
+
+.cd-fixed-bg {
+	position: relative;
+	min-height: 100%;
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center center;
+	z-index: index($bg-elements, fixed-bg); // see partials > _variables.scss
+
+	h1, h2 {
+		position: absolute;
+		@include center;
+		width: 90%;
+		max-width: $L;
+
+		text-align: center;
+		@include font-size(30px);
+		text-shadow: 0 1px 3px rgba(#000, .3);
+		color: $color-4;
+	}
+
+	&.cd-bg-1 {
+		background-image: url('../img/cd-background-1.jpg');
+	}
+
+	&.cd-bg-2 {
+		background-image: url('../img/cd-background-2.jpg');
+	}
+
+	&.cd-bg-3 {
+		background-image: url('../img/cd-background-3.jpg');
+	}
+
+	&.cd-bg-4 {
+		background-image: url('../img/cd-background-4.jpg');
+	}
+
+	@include MQ(M) {
+		h1, h2 {
+			font-size: 36px;
+		}
+	}
+
+	@include MQ(L) {
+		background-attachment: fixed;
+
+		h1, h2 {
+			font-size: 48px;
+			font-weight: 300;
+		}
+	}
+}
+
+.cd-scrolling-bg {
+	position: relative;
+	min-height: 100%;
+	padding: 4em 0;
+	line-height: 1.6;
+	box-shadow: 0 0 50px rgba(#000, .5);
+	z-index: index($bg-elements, scrolling-bg); // see partials > _variables.scss
+
+	&.cd-color-1 {
+		background-color: $color-1;
+		color: lighten($color-1, 40%);
+	}
+
+	&.cd-color-2 {
+		background-color: $color-2;
+		color: $color-1;
+	}
+
+	&.cd-color-3 {
+		background-color: $color-3;
+		color: $color-1;
+	}
+
+	@include MQ(M) {
+		padding: 8em 0;
+		@include font-size(20px);
+		line-height: 2;
+		font-weight: 300;
+	}
+}
+
+/// border-gradient mixin: ///
+
+@mixin border-gradient($from, $to, $weight: 0) {
+  $mix-main: mix($from, $to);
+  $mix-sub-from: mix($mix-main, $from);
+  $mix-sub-to: mix($mix-main, $to);
+  
+  box-shadow: 0 1px 0 $weight rgba($mix-sub-to, .25),
+              0 -1px 0 $weight rgba($mix-sub-from, .25),
+              1px 0 0 $weight rgba($mix-sub-to, .25),
+              -1px 0 0 $weight  rgba($mix-sub-from, .25),
+              1px -1px 0 $weight rgba($mix-main, .5),
+              -1px 1px 0 $weight rgba($mix-main, .5),
+              1px 1px 0 $weight rgba($to, .75),
+              -1px -1px 0 $weight rgba($from, .75);
+}
+
+/// BASIC EXAMPLE ///
+
+.circle {
+  @include size(100px 100px);
+  
+  border-radius: 100%;
+  
+  @include border-gradient(red, yellow);
+}
+
+
+////////////// OTHER EXAMPLES ////////////////
+
+
+.circle {
+  &:nth-of-type(2) {
+    @include border-gradient(skyblue, hotpink);
+
+    animation: rotateThis 1s linear infinite;
+  }
+
+  &:nth-of-type(3) {
+    @include border-gradient(#E14847, #B53BB4);
+  }
+  
+  &-multiple { @include size(100px 100px); }
+  
+  &-multiple & {
+    @include position(absolute, 0px 0px 0px 0px);
+    margin: auto;
+    
+    &:nth-of-type(1) { animation: psycho 2s linear infinite; }
+    &:nth-of-type(2) { animation: psycho 2s linear .1s infinite; }
+    &:nth-of-type(3) { animation: psycho 2s linear .25s infinite; }
+  }
+ 
+}
+
+@keyframes rotateThis {
+  from {
+    transform: rotate(0deg) scale(1);
+  }
+  
+  to {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+@keyframes psycho {
+  0% {
+    transform: rotate(0deg) scale(1) translate(0, 0);
+  }
+  
+  33% {
+    transform: rotate(360deg) scale(1) translate(5px, 5px);
+  }
+  
+  66% {
+    transform: rotate(720deg) scale(1) translate(-5px, -5px);
+  }
+  
+  100% {
+    transform: rotate(1080deg) scale(1) translate(0, 0);
+  }
+}
+
+
+
+.btn {
+  border: none;
+  display: inline-block;
+  background: transparent;
+  
+  color: rgba(white, .7);
+  background: rgba(white, .05);
+  text-decoration: none;
+  
+  padding: 15px 20px;
+  
+  border-radius: 10px;
+  
+  transition: all .2s;
+  
+  @include border-gradient(gray, darkgray);
+  
+  &:hover {
+    @include border-gradient(hotpink, skyblue);
+    color: white;
+    background: rgba(skyblue, .05);
+  }
+}
+
+
+///// OTHER /////
+
+
+img{
+  
+  margin-top: 30px;
+  
+}
+
+.circles > * {
+  display: inline-block; vertical-align: top;
+  
+  position: relative;
+  margin: 0 2%;
+}
+
+.circles { 
+  transform: translateZ(0); 
+  margin-bottom: 100px;
+}
+
+
+}
